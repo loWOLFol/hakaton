@@ -1,0 +1,180 @@
+:root {
+  --accent: #2b8a3e;
+  --accent-dark: #166534;
+  --muted: #6b7280;
+  --bg: #f6fbf6;
+  --card: #ffffff;
+}
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: linear-gradient(180deg, #f7fcf7, #f2faf2);
+  margin: 0;
+  color: #072018;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  background: transparent;
+}
+.brand {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 20px;
+}
+.top-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+button.btn {
+  background: var(--accent);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+}
+button.ghost {
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: var(--accent);
+}
+main {
+  max-width: 1100px;
+  margin: 18px auto;
+  padding: 0 16px;
+}
+.hero {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.hero-card {
+  flex: 1;
+  background: var(--card);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 6px 18px rgba(6, 78, 36, 0.04);
+}
+.hero h1 {
+  margin: 0 0 8px 0;
+  font-size: 26px;
+}
+.subs {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+.plan {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff, #f8fff8);
+  border: 1px solid #e6f4e6;
+}
+.plan h4 {
+  margin: 0 0 6px 0;
+}
+.small {
+  font-size: 13px;
+  color: var(--muted);
+}
+.right-panel {
+  width: 320px;
+}
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid #eef6ef;
+  margin-bottom: 12px;
+}
+
+/* Layout for dashboard after login */
+.app {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 16px;
+  margin-top: 18px;
+}
+.sidebar {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid #eef6ef;
+}
+.nav button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.nav button.active {
+  background: linear-gradient(90deg, #ecfdf3, #ffffff);
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+  }
+  .right-panel {
+    width: 100%;
+  }
+  .app {
+    display: block;
+  }
+}
+
+/* forms */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e6ece6;
+  background: transparent;
+}
+label {
+  font-size: 13px;
+  display: block;
+  margin-top: 8px;
+}
+
+/* small utilities */
+.muted {
+  color: var(--muted);
+}
+.pill {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #f0fff0;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--accent-dark);
+}
+.task {
+  border: 1px dashed #e6f2e6;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.danger {
+  color: #a01;
+}
+.risk-text {
+  background: #fff7e6;
+  border: 1px solid #ffe7c7;
+  padding: 10px;
+  border-radius: 8px;
+}

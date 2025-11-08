@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AgroTech — Platform (v3)</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
+    />
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header>
+      <div class="brand">AgroTech Platform</div>
+      <div class="top-controls">
+        <div class="muted">
+          demo roles: <strong>director/pass</strong>,
+          <strong>depdir/pass</strong>, <strong>manager1/pass</strong>,
+          <strong>senior/pass</strong>, <strong>worker/pass</strong>
+        </div>
+        <button id="loginBtn" class="btn">Войти</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Landing / subscription chooser -->
+      <section class="hero">
+        <div class="hero-card">
+          <h1>Добро пожаловать в AgroTech</h1>
+          <p class="small">
+            Платформа управления сельхозпроизводством. Выберите подписку, чтобы
+            получить нужный набор инструментов.
+          </p>
+
+          <div class="subs">
+            <div class="plan">
+              <h4>Универсальная</h4>
+              <div class="small">Все инструменты: урожай + животноводство</div>
+              <div style="margin-top: 8px">
+                <strong>Цена:</strong> 10000 KZT/мес
+              </div>
+              <div style="margin-top: 8px">
+                <button class="btn choosePlan" data-plan="universal">
+                  Выбрать
+                </button>
+              </div>
+            </div>
+            <div class="plan">
+              <h4>Урожайная</h4>
+              <div class="small">
+                Аналитика урожаев, расчёт объёмов, прогнозы
+              </div>
+              <div style="margin-top: 8px">
+                <strong>Цена:</strong> 7000 KZT/мес
+              </div>
+              <div style="margin-top: 8px">
+                <button class="btn choosePlan" data-plan="crop">Выбрать</button>
+              </div>
+            </div>
+            <div class="plan">
+              <h4>Животноводческая</h4>
+              <div class="small">
+                Учёт животных, кормов, ветеринарные заметки
+              </div>
+              <div style="margin-top: 8px">
+                <strong>Цена:</strong> 5000 KZT/мес
+              </div>
+              <div style="margin-top: 8px">
+                <button class="btn choosePlan" data-plan="livestock">
+                  Выбрать
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 12px" class="small">
+            Нет подписки? Нажмите «Выбрать» у выбранной подписки и заполните
+            заявку — она будет отправлена на почту компании для оформления.
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="card">
+            <h3>О нас</h3>
+            <div class="small">
+              AgroTech — демонстрационная платформа. Адаптивный интерфейс, роли
+              и подписки, AI-помощник для генерации задач (нужна модерация
+              менеджером).
+            </div>
+          </div>
+          <div class="card">
+            <h4>Доп. услуги</h4>
+            <ul class="small">
+              <li>Установка датчиков</li>
+              <li>Интеграция с метеодатчиками</li>
+              <li>Обучение персонала</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- App area (hidden until login) -->
+      <div id="appArea" style="display: none; margin-top: 18px">
+        <div class="app">
+          <aside class="sidebar">
+            <div style="font-weight: 700; margin-bottom: 10px">Меню</div>
+            <div class="nav" id="mainNav">
+              <button data-view="dashboard" class="active">Панель</button>
+              <button data-view="tasks">Задачи</button>
+              <button data-view="news">Стена новостей</button>
+              <button data-view="chat">Чат</button>
+              <button data-view="weather">Погода</button>
+              <button data-view="services">Услуги</button>
+              <button data-view="admin" id="adminNavBtn" style="display: none">
+                Модерация
+              </button>
+              <div style="height: 8px"></div>
+              <div class="small">
+                Пользователь: <strong id="userLabel">-</strong>
+              </div>
+              <div class="small">
+                Подписка: <strong id="userPlan">-</strong>
+              </div>
+              <div style="height: 8px"></div>
+              <button id="logoutBtn" class="ghost">Выйти</button>
+            </div>
+          </aside>
+
+          <section style="flex: 1">
+            <!-- views -->
+            <div id="dashboardView" class="view card">
+              <h3>Панель</h3>
+              <div class="small">Индикаторы и общий риск</div>
+              <div
+                style="
+                  display: flex;
+                  gap: 12px;
+                  margin-top: 12px;
+                  flex-wrap: wrap;
+                "
+              >
+                <div style="flex: 1; min-width: 220px" class="card">
+                  <strong>Индикатор влажности</strong>
+                  <div id="soilHum">--%</div>
+                </div>
+                <div style="flex: 1; min-width: 220px" class="card">
+                  <strong>Температура (Tmax)</strong>
+                  <div id="tMax">--°C</div>
+                </div>
+                <div style="flex: 1; min-width: 220px" class="card">
+                  <strong>Осадки (sum)</strong>
+                  <div id="rainSum">-- мм</div>
+                </div>
+                <div style="flex: 1; min-width: 220px" class="card">
+                  <strong>Риск</strong>
+                  <div id="riskScore">--%</div>
+                  <div id="riskText" style="margin-top: 8px"></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="tasksView" class="view hidden card">
+              <h3>Task Manager</h3>
+              <div class="small">
+                Задачи сгруппированы по рискам. Только менеджеры отдела и выше
+                могут создавать задачи. AI может предлагать задачи — менеджер
+                подтверждает.
+              </div>
+              <div style="display: flex; gap: 12px; margin-top: 12px">
+                <div style="flex: 1">
+                  <div
+                    style="
+                      display: flex;
+                      gap: 8px;
+                      margin-bottom: 8px;
+                      align-items: center;
+                    "
+                  >
+                    <select id="taskFilter">
+                      <option value="all">Все группы</option>
+                    </select>
+                    <button id="genAiBtn" class="btn">
+                      Предложить задачи (AI)
+                    </button>
+                    <button id="createTaskBtn" class="btn">
+                      Создать задачу
+                    </button>
+                  </div>
+                  <div id="taskList"></div>
+                </div>
+                <div style="width: 320px">
+                  <div id="taskFormCard" class="card">
+                    <h4>Форма задачи</h4>
+                    <label>Название <input id="tf_title" /></label>
+                    <label
+                      >Группа
+                      <input
+                        id="tf_group"
+                        placeholder="влажность, удобрения..."
+                    /></label>
+                    <label>Описание <textarea id="tf_desc"></textarea></label>
+                    <label
+                      >Приоритет
+                      <select id="tf_priority">
+                        <option>Низкий</option>
+                        <option selected>Средний</option>
+                        <option>Высокий</option>
+                      </select></label
+                    >
+                    <div style="display: flex; gap: 8px; margin-top: 8px">
+                      <button id="tf_save" class="btn">Сохранить</button
+                      ><button id="tf_clear" class="ghost">Сброс</button>
+                    </div>
+                    <div id="aiSuggestions" style="margin-top: 10px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="newsView" class="view hidden card">
+              <h3>Стена новостей</h3>
+              <div class="small">Объявления и обсуждения</div>
+              <div style="display: flex; gap: 8px; margin-top: 8px">
+                <input id="newsInput" placeholder="Заголовок" /><button
+                  id="postNews"
+                  class="btn"
+                >
+                  Опубликовать
+                </button>
+              </div>
+              <div id="newsWall" style="margin-top: 12px"></div>
+            </div>
+
+            <div id="chatView" class="view hidden card">
+              <h3>Чат</h3>
+              <div
+                id="chatMessages"
+                style="
+                  height: 240px;
+                  overflow: auto;
+                  border: 1px solid #eef6ef;
+                  border-radius: 8px;
+                  padding: 8px;
+                "
+              ></div>
+              <div style="display: flex; gap: 8px; margin-top: 8px">
+                <input id="chatText" placeholder="Сообщение" /><button
+                  id="chatSend"
+                  class="btn"
+                >
+                  Отправить
+                </button>
+              </div>
+            </div>
+
+            <div id="weatherView" class="view hidden card">
+              <h3>Погода</h3>
+              <div class="small">Данные берутся из Open-Meteo</div>
+              <div style="display: flex; gap: 8px; margin-top: 8px">
+                <input id="cityWeather" placeholder="Petropavlovsk" /><button
+                  id="fetchWeather"
+                  class="btn"
+                >
+                  Получить
+                </button>
+              </div>
+              <div id="weatherRes" style="margin-top: 12px"></div>
+            </div>
+
+            <div id="servicesView" class="view hidden card">
+              <h3>Услуги</h3>
+              <div class="small">
+                Доп. услуги: установка датчиков, обучение, интеграция
+              </div>
+              <div style="margin-top: 8px">
+                <button id="requestService" class="btn">
+                  Запросить установку датчиков
+                </button>
+              </div>
+            </div>
+
+            <div id="adminView" class="view hidden card">
+              <h3>Модерация AI / Фото (только менеджеры и директор)</h3>
+              <div id="adminQueue"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- modal login/register/subscription -->
+      <div
+        id="modal"
+        style="
+          display: none;
+          position: fixed;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 50;
+          width: 420px;
+        "
+      >
+        <div class="card">
+          <div id="modalContent"></div>
+          <div
+            style="
+              display: flex;
+              gap: 8px;
+              margin-top: 8px;
+              justify-content: flex-end;
+            "
+          >
+            <button id="modalClose" class="ghost">Закрыть</button>
+          </div>
+        </div>
+      </div>
+
+      <footer style="text-align: center; margin-top: 28px" class="small muted">
+        AgroTech demo — адаптивный прототип
+      </footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
