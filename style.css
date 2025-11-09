@@ -289,11 +289,12 @@ label {
 .slider {
   position: relative;
   width: 100%;
-  height: 600px;
+  aspect-ratio: 16/9;   /* автоматом подстраивает высоту */
   overflow: hidden;
   border-radius: 14px;
 }
 
+/* картинки */
 .slider img {
   width: 100%;
   height: 100%;
@@ -308,6 +309,7 @@ label {
   opacity:1;
 }
 
+/* кнопки */
 .slider-btns {
   display:flex;
   justify-content:center;
@@ -316,6 +318,21 @@ label {
 }
 
 .slider-btns button{
-  padding:4px 10px;
+  padding:6px 14px;
+  font-size:18px;
+  border-radius:8px;
 }
+
+/* Адаптив: маленькие экраны */
+@media (max-width: 600px){
+  .slider-btns button{
+    padding:4px 10px;
+    font-size:15px;
+  }
+
+  .slider{
+    aspect-ratio: 4/3; /* более квадратная на телефонах */
+  }
+}
+
 
