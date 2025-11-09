@@ -8,7 +8,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
     />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>
@@ -27,12 +27,18 @@
     <main>
       <!-- Landing / subscription chooser -->
       <div class="logo-div">
-        <img
-          src="7974bf34-71d2-4c77-be6b-283e41e6ecdd.jpg"
-          alt=""
-          class="logo"
-        />
-      </div>
+  <div class="slider">
+    <img src="./1.jpg" class="slide" />
+    <img src="./2.jpg" class="slide" />
+    <img src="./3.jpg" class="slide" />
+  </div>
+
+  <div class="slider-btns">
+    <button onclick="prevSlide()">◀</button>
+    <button onclick="nextSlide()">▶</button>
+  </div>
+</div>
+
 
       <section class="hero">
         <div class="hero-card">
@@ -339,8 +345,6 @@
       </div>
     </div>
 
-    <script src="./app.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>
-
-
