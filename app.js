@@ -9,7 +9,49 @@ let chatKey = "ag_chat_v3";
 let adminQueueKey = "ag_admin_v3";
 let weatherState = { tmax: null, precip: null };
 
-// --- default users (director, depdir, manager, senior, worker) ---
+// СОС
+let sosMessages = [];
+
+document.getElementById("sosBtn").onclick = () => {
+    document.getElementById("sosModal").style.display = "flex";
+    renderSOS();
+}
+
+function closeSOS(){
+    document.getElementById("sosModal").style.display="none";
+}
+
+function addSOS(){
+    let txt = document.getElementById("sosInput").value;
+    if(txt.trim()!==""){
+        sosMessages.push(txt);
+        document.getElementById("sosInput").value="";
+        renderSOS();
+    }
+}
+
+function removeSOS(i){
+    sosMessages.splice(i,1);
+    renderSOS();
+}
+
+function renderSOS(){
+    let html = "";
+    sosMessages.forEach((t,i)=>{
+        html += `<div class="sos-item">${t} <button onclick="removeSOS(${i})">Удалено</button></div>`;
+    })
+    document.getElementById("sosList").innerHTML = html;
+
+    // проверка — есть сообщения?
+    const sosBtn = document.getElementById("sosBtn");
+    if(sosMessages.length > 0){
+        sosBtn.classList.add("blink");
+    }else{
+        sosBtn.classList.remove("blink");
+    }
+}
+
+// --- default users ---
 function ensureDefaults() {
   if (!localStorage.getItem(usersKey)) {
     const u = [
@@ -116,22 +158,30 @@ document.querySelectorAll(".choosePlan").forEach((b) =>
   })
 );
 
-// Login flow (modal)
+// --- Modal helpers ---
+function openModal(html) {
+  $("#modalContent").innerHTML = html;
+  $("#modal").style.display = "block";
+}
+function closeModal() {
+  $("#modal").style.display = "none";
+}
+$("#modalClose").addEventListener("click", closeModal);
+
+// --- Login / Register ---
 $("#loginBtn").addEventListener("click", () => {
   openModal(`<h3>Авторизация</h3>
     <label>Логин <input id='li_login'></label>
     <label>Пароль <input id='li_pass' type='password'></label>
-    <div style='display:flex;gap:8px;justify-content:flex-end;margin-top:8px'><button id='doLogin' class='btn'>Войти</button><button id='toRegister' class='ghost'>Регистрация</button></div>
-  `);
+    <div style='display:flex;gap:8px;justify-content:flex-end;margin-top:8px'>
+      <button id='doLogin' class='btn'>Войти</button>
+    </div>`);
   document.getElementById("doLogin").addEventListener("click", () => {
     const l = $("#li_login").value.trim();
     const p = $("#li_pass").value;
     const users = JSON.parse(localStorage.getItem(usersKey) || "[]");
     const u = users.find((x) => x.login === l && x.pass === p);
-    if (!u) {
-      alert("Неверный логин или пароль");
-      return;
-    }
+    if (!u) return alert("Неверный логин или пароль");
     currentUser = u;
     afterLogin();
     closeModal();
@@ -146,44 +196,59 @@ function showRegister() {
   <label>Логин <input id='reg_login'></label>
   <label>Пароль <input id='reg_pass' type='password'></label>
   <label>Email <input id='reg_email' type='email'></label>
-  <label>Должность <select id='reg_role'><option value='worker'>Работник</option><option value='senior'>Старший</option><option value='manager'>Менеджер</option><option value='depdir'>Зам. директора</option><option value='director'>Директор</option></select></label>
-  <label>Подписка <select id='reg_plan'><option value='crop'>Урожайная</option><option value='livestock'>Животноводческая</option><option value='universal'>Универсальная</option></select></label>
-  <div style='display:flex;gap:8px;justify-content:flex-end;margin-top:8px'><button id='doReg' class='btn'>Зарегистрироваться</button></div>
-`);
+  <label>Должность 
+    <select id='reg_role'>
+      <option value='worker'>Работник</option>
+      <option value='senior'>Старший</option>
+      <option value='manager'>Менеджер</option>
+      <option value='depdir'>Зам. директора</option>
+      <option value='director'>Директор</option>
+    </select></label>
+  <label>Подписка 
+    <select id='reg_plan'>
+      <option value='crop'>Урожайная</option>
+      <option value='livestock'>Животноводческая</option>
+      <option value='universal'>Универсальная</option>
+    </select></label>
+  <div style='display:flex;gap:8px;justify-content:flex-end;margin-top:8px'>
+    <button id='doReg' class='btn'>Зарегистрироваться</button>
+  </div>`);
   document.getElementById("doReg").addEventListener("click", () => {
     const login = $("#reg_login").value.trim();
     const pass = $("#reg_pass").value;
     const email = $("#reg_email").value.trim();
     const role = $("#reg_role").value;
     const plan = $("#reg_plan").value;
-    if (!login || !pass || !email) {
-      alert("Заполните логин / пароль / email");
-      return;
-    }
+    if (!login || !pass || !email)
+      return alert("Заполните логин / пароль / email");
     const users = JSON.parse(localStorage.getItem(usersKey) || "[]");
-    if (users.find((x) => x.login === login)) {
-      alert("Пользователь с таким логином уже существует");
-      return;
-    }
-    users.push({ login, pass, role, email, plan });
+    if (users.find((x) => x.login === login))
+      return alert("Такой логин уже есть");
+    users.push({ login, pass, email, role, plan });
     localStorage.setItem(usersKey, JSON.stringify(users));
-    alert("Регистрация прошла. Авторизуйтесь.");
+    alert("Регистрация завершена. Авторизуйтесь.");
     closeModal();
   });
 }
 
-// after login, show app
+// --- After login ---
 function afterLogin() {
   $("#userLabel").textContent =
     currentUser.login + " (" + currentUser.role + ")";
   $("#userPlan").textContent = currentUser.plan || "—";
   $("#loginBtn").style.display = "none";
   $("#appArea").style.display = "block";
-  // show admin/mod buttons based on role
-  if (["director", "depdir", "manager"].includes(currentUser.role))
-    $("#adminNavBtn").style.display = "block";
-  else $("#adminNavBtn").style.display = "none";
-  // show/hide create task
+  document.querySelector(".hero").style.display = "none";
+  document.querySelector(".logo-div").style.display = "none";
+
+  const isManagerPlus = ["director", "depdir", "manager"].includes(
+    currentUser.role
+  );
+  $("#adminNavBtn").style.display = isManagerPlus ? "block" : "none";
+  document.getElementById("adminView").style.display = isManagerPlus
+    ? "block"
+    : "none";
+
   document.getElementById("createTaskBtn").style.display = [
     "director",
     "depdir",
@@ -192,37 +257,44 @@ function afterLogin() {
   ].includes(currentUser.role)
     ? "inline-block"
     : "none";
-  // render initial views
+
+  document.querySelectorAll(".view").forEach((v) => v.classList.add("hidden"));
+  document.getElementById("dashboardView").classList.remove("hidden");
+
+  document.getElementById("modal").style.display = "none";
   bindNav();
   renderAll();
 }
 
+// --- Logout ---
 $("#logoutBtn").addEventListener("click", () => {
   currentUser = null;
   $("#appArea").style.display = "none";
   $("#loginBtn").style.display = "inline-block";
+  document.querySelector(".hero").style.display = "flex";
+  document.querySelector(".logo-div").style.display = "flex";
+  document.querySelectorAll(".view").forEach((v) => v.classList.add("hidden"));
   alert("Вы вышли");
 });
 
+// --- Navigation ---
 function bindNav() {
-  document.querySelectorAll("#mainNav button").forEach((b) =>
-    b.addEventListener("click", () => {
-      document
-        .querySelectorAll("#mainNav button")
-        .forEach((x) => x.classList.remove("active"));
-      b.classList.add("active");
-      showView(b.dataset.view);
-    })
-  );
-}
-function showView(id) {
-  document.querySelectorAll(".view").forEach((v) => v.classList.add("hidden"));
-  const el = document.getElementById(id + "View");
-  if (el) el.classList.remove("hidden");
-  renderAll();
+  document.querySelectorAll("#mainNav button[data-view]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#mainNav button").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      showView(btn.dataset.view);
+    });
+  });
 }
 
-// tasks
+function showView(viewName) {
+  document.querySelectorAll(".view").forEach((v) => v.classList.add("hidden"));
+  const el = document.getElementById(viewName + "View");
+  if (el) el.classList.remove("hidden");
+}
+
+// --- Tasks ---
 function getTasks() {
   return JSON.parse(localStorage.getItem(tasksKey) || "[]");
 }
@@ -235,7 +307,6 @@ function renderTasks() {
   const wrap = $("#taskList");
   wrap.innerHTML = "";
   list.forEach((t) => {
-    // filter by plan: if user plan doesn't include task group and user is not privileged, hide
     if (currentUser && currentUser.plan && currentUser.plan !== "universal") {
       if (
         currentUser.plan === "crop" &&
@@ -254,15 +325,13 @@ function renderTasks() {
     div.className = "task";
     div.innerHTML = `<div><strong>${t.title}</strong><div class='small'>${
       t.group
-    } • ${
-      t.desc || ""
-    }</div></div><div style='display:flex;gap:6px;align-items:center'><button class='btn completeBtn' data-id='${
-      t.id
-    }'>${
+    } • ${t.desc || ""}</div></div>
+    <div style='display:flex;gap:6px;align-items:center'>
+      <button class='btn completeBtn' data-id='${t.id}'>${
       t.completed ? "Отменить" : "Выполнено"
-    }</button><button class='ghost attachBtn' data-id='${
-      t.id
-    }'>Фото</button></div>`;
+    }</button>
+      <button class='ghost attachBtn' data-id='${t.id}'>Фото</button>
+    </div>`;
     wrap.appendChild(div);
   });
 }
@@ -299,7 +368,6 @@ document.getElementById("createTaskBtn").addEventListener("click", () => {
   });
 });
 
-// complete toggle
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("completeBtn")) {
     const id = +e.target.dataset.id;
@@ -352,7 +420,45 @@ document.getElementById("genAiBtn").addEventListener("click", () => {
   renderAdminQueue();
 });
 
-// admin queue render
+// --- Фото прикрепление ---
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("attachBtn")) {
+    const id = +e.target.dataset.id;
+    const ts = getTasks();
+    const task = ts.find((x) => x.id === id);
+    if (!task) return;
+
+    openModal(`<h3>Прикрепить фото</h3>
+      <input type='file' id='photoInput' accept='image/*'>
+      <div style='display:flex;gap:8px;justify-content:flex-end;margin-top:8px'>
+        <button id='uploadPhotoBtn' class='btn'>Отправить</button>
+      </div>`);
+
+    document.getElementById("uploadPhotoBtn").addEventListener("click", () => {
+      const file = document.getElementById("photoInput").files[0];
+      if (!file) return alert("Выберите фото");
+      const reader = new FileReader();
+      reader.onload = () => {
+        const queue = JSON.parse(localStorage.getItem(adminQueueKey) || "[]");
+        queue.push({
+          id: Date.now(),
+          type: "photo",
+          taskId: task.id,
+          photoData: reader.result,
+          uploadedBy: currentUser.login,
+          date: new Date().toLocaleString(),
+        });
+        localStorage.setItem(adminQueueKey, JSON.stringify(queue));
+        closeModal();
+        alert("Фото отправлено на модерацию");
+        renderAdminQueue();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+});
+
+// --- Модерация ---
 function renderAdminQueue() {
   const q = JSON.parse(localStorage.getItem(adminQueueKey) || "[]");
   const wrap = $("#adminQueue");
@@ -362,54 +468,80 @@ function renderAdminQueue() {
     const el = document.createElement("div");
     el.className = "card";
     el.style.marginBottom = "8px";
-    el.innerHTML = `<strong>${item.title}</strong><div class='small'>${item.group} • предложил: ${item.suggestedBy} • ${item.date}</div><div style='display:flex;gap:8px;margin-top:8px;justify-content:flex-end'><button class='btn approveAI' data-id='${item.id}'>Подтвердить</button><button class='ghost rejectAI' data-id='${item.id}'>Отклонить</button></div>`;
+    if (item.type === "photo") {
+      el.innerHTML = `
+        <div><strong>Фото для задачи #${item.taskId}</strong></div>
+        <div class='small'>Загрузил: ${item.uploadedBy} • ${item.date}</div>
+        <img src='${item.photoData}' style='max-width:100%;margin-top:6px;border-radius:8px'>
+        <div style='display:flex;gap:8px;margin-top:8px;justify-content:flex-end'>
+          <button class='btn approveAI' data-id='${item.id}'>Подтвердить</button>
+          <button class='ghost rejectAI' data-id='${item.id}'>Отклонить</button>
+        </div>`;
+    } else {
+      el.innerHTML = `<strong>${item.title}</strong>
+        <div class='small'>${item.group} • предложил: ${item.suggestedBy} • ${item.date}</div>
+        <div style='display:flex;gap:8px;margin-top:8px;justify-content:flex-end'>
+          <button class='btn approveAI' data-id='${item.id}'>Подтвердить</button>
+          <button class='ghost rejectAI' data-id='${item.id}'>Отклонить</button>
+        </div>`;
+    }
     wrap.appendChild(el);
   });
 }
 
-// approve/reject AI
+// --- Обработка кнопок модерации ---
 document.addEventListener("click", (e) => {
+  // Подтверждение элемента (AI-задача или фото)
   if (e.target.classList.contains("approveAI")) {
-    if (
-      !currentUser ||
-      !["director", "depdir", "manager"].includes(currentUser.role)
-    )
-      return alert("Только менеджер/директор может подтвердить");
+    if (!currentUser || !["director", "depdir", "manager"].includes(currentUser.role))
+      return alert("Только менеджер и выше могут подтверждать.");
+
     const id = e.target.dataset.id;
-    let q = JSON.parse(localStorage.getItem(adminQueueKey) || "[]");
-    const item = q.find((x) => x.id == id);
-    if (!item) return; // add to tasks
-    const ts = getTasks();
-    ts.push({
-      id: Date.now(),
-      title: item.title,
-      group: item.group,
-      desc: item.desc,
-      domain: item.domain,
-      completed: false,
-      author: item.suggestedBy,
-    });
-    localStorage.setItem(tasksKey, JSON.stringify(ts));
-    q = q.filter((x) => x.id != id);
-    localStorage.setItem(adminQueueKey, JSON.stringify(q));
+    let queue = JSON.parse(localStorage.getItem(adminQueueKey) || "[]");
+    const item = queue.find((x) => x.id == id);
+    if (!item) return;
+
+    // Если фото — просто помечаем как одобренное
+    if (item.type === "photo") {
+      alert(`Фото для задачи #${item.taskId} одобрено.`);
+    } 
+    // Если это AI-задача — добавляем её в общий список задач
+    else {
+      const ts = getTasks();
+      ts.push({
+        id: Date.now(),
+        title: item.title,
+        group: item.group,
+        desc: item.desc,
+        domain: item.domain,
+        completed: false,
+        author: item.suggestedBy || "AI",
+      });
+      localStorage.setItem(tasksKey, JSON.stringify(ts));
+      alert("Задача одобрена и добавлена в список.");
+    }
+
+    // Удаляем элемент из очереди
+    queue = queue.filter((x) => x.id != id);
+    localStorage.setItem(adminQueueKey, JSON.stringify(queue));
     renderAdminQueue();
     renderTasks();
-    alert("Задача подтверждена и добавлена");
   }
+
+  // Отклонение элемента
   if (e.target.classList.contains("rejectAI")) {
-    if (
-      !currentUser ||
-      !["director", "depdir", "manager"].includes(currentUser.role)
-    )
-      return alert("Только менеджер/директор может отклонить");
+    if (!currentUser || !["director", "depdir", "manager"].includes(currentUser.role))
+      return alert("Только менеджер и выше могут отклонять.");
+
     const id = e.target.dataset.id;
-    let q = JSON.parse(localStorage.getItem(adminQueueKey) || "[]");
-    q = q.filter((x) => x.id != id);
-    localStorage.setItem(adminQueueKey, JSON.stringify(q));
+    let queue = JSON.parse(localStorage.getItem(adminQueueKey) || "[]");
+    queue = queue.filter((x) => x.id != id);
+    localStorage.setItem(adminQueueKey, JSON.stringify(queue));
     renderAdminQueue();
-    alert("Предложение отклонено");
+    alert("Элемент отклонён.");
   }
 });
+
 
 // news
 $("#postNews").addEventListener("click", () => {
@@ -546,13 +678,14 @@ $("#requestService").addEventListener("click", () => {
   window.location.href = `mailto:${demoEmail}?subject=${subject}&body=${body}`;
 });
 
-// render helpers
+// --- Остальные render функции ---
 function renderAll() {
   renderTasks();
   renderNews();
   renderChat();
   renderAdminQueue();
 }
+
 function renderNews() {
   const arr = JSON.parse(localStorage.getItem(newsKey) || "[]");
   $("#newsWall").innerHTML = "";
@@ -574,5 +707,4 @@ function renderChat() {
   });
 }
 
-// initial: show landing only
 showView("dashboard");

@@ -3,16 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>AgroTech — Platform (v3)</title>
+    <title>Mergen— Platform (v3)</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
     />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>
-      <div class="brand">AgroTech Platform</div>
+      <div class="brand">Mergen Platform</div>
+      <div class="SOS"><button id="sosBtn" class="sos-btn">SOS</button></div>
       <div class="top-controls">
         <div class="muted">
           demo roles: <strong>director/pass</strong>,
@@ -25,9 +26,17 @@
 
     <main>
       <!-- Landing / subscription chooser -->
+      <div class="logo-div">
+        <img
+          src="7974bf34-71d2-4c77-be6b-283e41e6ecdd.jpg"
+          alt=""
+          class="logo"
+        />
+      </div>
+
       <section class="hero">
         <div class="hero-card">
-          <h1>Добро пожаловать в AgroTech</h1>
+          <h1>Добро пожаловать в Mergen</h1>
           <p class="small">
             Платформа управления сельхозпроизводством. Выберите подписку, чтобы
             получить нужный набор инструментов.
@@ -47,7 +56,7 @@
               </div>
             </div>
             <div class="plan">
-              <h4>Урожайная</h4>
+              <h4>Растениеводческая</h4>
               <div class="small">
                 Аналитика урожаев, расчёт объёмов, прогнозы
               </div>
@@ -84,8 +93,8 @@
           <div class="card">
             <h3>О нас</h3>
             <div class="small">
-              AgroTech — демонстрационная платформа. Адаптивный интерфейс, роли
-              и подписки, AI-помощник для генерации задач (нужна модерация
+              Mergen — демонстрационная платформа. Адаптивный интерфейс, роли и
+              подписки, AI-помощник для генерации задач (нужна модерация
               менеджером).
             </div>
           </div>
@@ -108,7 +117,7 @@
             <div class="nav" id="mainNav">
               <button data-view="dashboard" class="active">Панель</button>
               <button data-view="tasks">Задачи</button>
-              <button data-view="news">Стена новостей</button>
+              <button data-view="news">Новости</button>
               <button data-view="chat">Чат</button>
               <button data-view="weather">Погода</button>
               <button data-view="services">Услуги</button>
@@ -189,7 +198,7 @@
                   </div>
                   <div id="taskList"></div>
                 </div>
-                <div style="width: 320px">
+                <!-- <div style="width: 320px">
                   <div id="taskFormCard" class="card">
                     <h4>Форма задачи</h4>
                     <label>Название <input id="tf_title" /></label>
@@ -214,7 +223,7 @@
                     </div>
                     <div id="aiSuggestions" style="margin-top: 10px"></div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
 
@@ -270,13 +279,11 @@
 
             <div id="servicesView" class="view hidden card">
               <h3>Услуги</h3>
-              <div class="small">
+              <div class="small" style="margin-bottom: 15px">
                 Доп. услуги: установка датчиков, обучение, интеграция
               </div>
-              <div style="margin-top: 8px">
-                <button id="requestService" class="btn">
-                  Запросить установку датчиков
-                </button>
+              <div class="">
+                <a href="dat.html" class="a-bn">Установка датчиков</a>
               </div>
             </div>
 
@@ -317,9 +324,21 @@
       </div>
 
       <footer style="text-align: center; margin-top: 28px" class="small muted">
-        AgroTech demo — адаптивный прототип
+        Mergen demo — адаптивный прототип
       </footer>
     </main>
+    <div id="sosModal">
+      <div id="sosWindow">
+        <h3>Экстренные сообщения</h3>
+        <div id="sosList"></div>
+
+        <input type="text" id="sosInput" placeholder="Введите сообщение" />
+        <button onclick="addSOS()">Добавить</button>
+        <br /><br />
+        <button onclick="closeSOS()">Закрыть</button>
+      </div>
+    </div>
+
     <script src="app.js"></script>
   </body>
 </html>

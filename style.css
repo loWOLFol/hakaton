@@ -36,6 +36,18 @@ button.btn {
   border: 0;
   cursor: pointer;
 }
+
+.a-bn {
+  background: var(--accent);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
 button.ghost {
   background: transparent;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -177,4 +189,104 @@ label {
   border: 1px solid #ffe7c7;
   padding: 10px;
   border-radius: 8px;
+}
+
+
+/* Адаптив: маленькие экраны, смартфоны */
+@media (max-width: 600px) {
+  .subs {
+    flex-direction: column;      /* карточки вниз */
+  }
+
+  .plan {
+    width: 100%;
+  }
+
+  .hero-card {
+    padding: 16px;               /* чуть меньше отступы чтобы не лезло за экран */
+  }
+
+  .hero-card h1 {
+    font-size: 22px;
+  }
+
+  .small {
+    font-size: 12px;
+  }
+}
+
+
+
+.sos-btn{
+    background:red;
+    color:white;
+    font-weight:bold;
+    padding:12px 26px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:22px;
+    transition:0.2s;
+    /* НЕТ тени по умолчанию */
+}
+
+.blink{
+    animation:blink 0.6s infinite;
+}
+
+@keyframes blink{
+    0%{ 
+        opacity:1;
+        box-shadow:0 0 15px rgba(255,0,0,1),0 0 30px rgba(255,0,0,0.8);
+        transform:scale(1.03);
+    }
+    50%{
+        opacity:0.45;
+        box-shadow:0 0 5px rgba(255,0,0,0.3);
+        transform:scale(1.00);
+    }
+    100%{
+        opacity:1;
+        box-shadow:0 0 15px rgba(255,0,0,1),0 0 30px rgba(255,0,0,0.8);
+        transform:scale(1.03);
+    }
+}
+
+
+
+#sosModal{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    background:rgba(0,0,0,0.7);
+    justify-content:center;
+    align-items:center;
+}
+
+#sosWindow{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    width:350px;
+}
+.sos-item{
+    display:flex;
+    justify-content:space-between;
+    margin:5px 0;
+}
+
+.logo-div {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 6px 18px rgba(6, 78, 36, 0.04);
+  margin-bottom: 10px;
+}
+
+img.logo {
+  width: 100%;
+  border-radius: 14px;
 }

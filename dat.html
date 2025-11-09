@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mergen— Platform (v3)</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-green-50 font-sans">
+    <div class=".b-tn" style="margin-top: 20px; margin-left: 15px;">
+      <a href="index.html" class="a-bn"><-назад</a>
+    </div>
+    <!-- Датчики -->
+    <section class="max-w-4xl mx-auto px-6 py-12">
+      <h2 class="text-3xl font-semibold text-green-700 text-center mb-8">
+        Датчики
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-4 bg-white rounded shadow">
+          <h3 class="font-bold mb-2">Температура и влажность воздуха/почвы</h3>
+          <p class="mb-2">
+            Цена: <span class="sensor-price" data-price="1500">1500 тг</span>
+          </p>
+          <label
+            >Количество:
+            <input
+              type="number"
+              min="0"
+              value="0"
+              class="sensor-count w-20 p-1 border rounded"
+            />
+          </label>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <h3 class="font-bold mb-2">
+            Датчики солнечной радиации и освещенности
+          </h3>
+          <p class="mb-2">
+            Цена: <span class="sensor-price" data-price="1200">1200 тг</span>
+          </p>
+          <label
+            >Количество:
+            <input
+              type="number"
+              min="0"
+              value="0"
+              class="sensor-count w-20 p-1 border rounded"
+            />
+          </label>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <h3 class="font-bold mb-2">Датчики ветра и осадков</h3>
+          <p class="mb-2">
+            Цена: <span class="sensor-price" data-price="1800">1800 тг</span>
+          </p>
+          <label
+            >Количество:
+            <input
+              type="number"
+              min="0"
+              value="0"
+              class="sensor-count w-20 p-1 border rounded"
+            />
+          </label>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <h3 class="font-bold mb-2">pH и электропроводность почвы</h3>
+          <p class="mb-2">
+            Цена: <span class="sensor-price" data-price="2000">2000 тг</span>
+          </p>
+          <label
+            >Количество:
+            <input
+              type="number"
+              min="0"
+              value="0"
+              class="sensor-count w-20 p-1 border rounded"
+            />
+          </label>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <h3 class="font-bold mb-2">Камеры и ИИ-ловушки</h3>
+          <p class="mb-2">
+            Цена: <span class="sensor-price" data-price="5000">5000 тг</span>
+          </p>
+          <label
+            >Количество:
+            <input
+              type="number"
+              min="0"
+              value="0"
+              class="sensor-count w-20 p-1 border rounded"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="mt-4 text-right">
+        <p>Итого: <span id="totalCost">0</span> тг / год</p>
+      </div>
+    </section>
+
+    <!-- Тарифы с комбинациями датчиков -->
+    <section class="max-w-5xl mx-auto px-6 py-12">
+      <h2 class="text-3xl font-semibold text-green-700 text-center mb-8">
+        Тарифы
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+        <div class="p-6 bg-white rounded shadow">
+          <h3 class="text-2xl font-bold mb-2">Базовый</h3>
+          <p class="text-gray-700 mb-2">до 30 000 тг</p>
+          <p class="font-semibold text-green-700">30 000 тг / год</p>
+          <button
+            class="buy-btn mt-4 px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
+            disabled
+            data-plan="basic"
+          >
+            Купить
+          </button>
+        </div>
+        <div class="p-6 bg-white rounded shadow">
+          <h3 class="text-2xl font-bold mb-2">Оптимальный</h3>
+          <p class="text-gray-700 mb-2">30 000–85 000 тг</p>
+          <p class="font-semibold text-green-700">85 000 тг / год</p>
+          <button
+            class="buy-btn mt-4 px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
+            disabled
+            data-plan="optimal"
+          >
+            Купить
+          </button>
+        </div>
+        <div class="p-6 bg-white rounded shadow">
+          <h3 class="text-2xl font-bold mb-2">Премиум</h3>
+          <p class="text-gray-700 mb-2">от 85 000 тг</p>
+          <p class="font-semibold text-green-700">90 000 тг / год</p>
+          <button
+            class="buy-btn mt-4 px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
+            disabled
+            data-plan="premium"
+          >
+            Купить
+          </button>
+        </div>
+        <!-- Комбинационные тарифы -->
+        <div class="p-6 bg-white rounded shadow">
+          <h3 class="text-2xl font-bold mb-2">Базовый + Камеры</h3>
+          <p class="text-gray-700 mb-2">30 000 + камеры</p>
+          <p class="font-semibold text-green-700">35 000 тг / год</p>
+          <button
+            class="buy-btn mt-4 px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
+            disabled
+            data-plan="basic-cam"
+          >
+            Купить
+          </button>
+        </div>
+        <div class="p-6 bg-white rounded shadow">
+          <h3 class="text-2xl font-bold mb-2">
+            Оптимальный + pH и освещенность
+          </h3>
+          <p class="text-gray-700 mb-2">85 000 + датчики почвы и света</p>
+          <p class="font-semibold text-green-700">92 000 тг / год</p>
+          <button
+            class="buy-btn mt-4 px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
+            disabled
+            data-plan="optimal-combo"
+          >
+            Купить
+          </button>
+        </div>
+        <div class="p-6 bg-white rounded shadow">
+          <h3 class="text-2xl font-bold mb-2">Премиум + Все датчики</h3>
+          <p class="text-gray-700 mb-2">90 000 + полный набор</p>
+          <p class="font-semibold text-green-700">110 000 тг / год</p>
+          <button
+            class="buy-btn mt-4 px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
+            disabled
+            data-plan="premium-full"
+          >
+            Купить
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div style="margin-top: 8px; text-align: center; margin-bottom: 20px;">
+      <button id="requestService" class="btn">
+        Запросить установку датчиков
+      </button>
+    </div>
+
+    <!-- Привязка карты -->
+    <div
+      id="cardModal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden"
+    >
+      <div class="bg-white p-6 rounded shadow w-80">
+        <h3 class="text-xl font-bold mb-4">Привязка карты</h3>
+        <form id="cardForm">
+          <input
+            type="text"
+            placeholder="Номер карты"
+            required
+            class="w-full p-2 mb-2 border rounded"
+          />
+          <input
+            type="text"
+            placeholder="Срок действия"
+            required
+            class="w-full p-2 mb-2 border rounded"
+          />
+          <input
+            type="text"
+            placeholder="CVV"
+            required
+            class="w-full p-2 mb-2 border rounded"
+          />
+          <button
+            type="submit"
+            class="w-full bg-green-700 text-white p-2 rounded"
+          >
+            Привязать карту
+          </button>
+        </form>
+        <p id="cardSuccess" class="text-green-700 mt-2 hidden">
+          Карта успешно привязана!
+        </p>
+        <button onclick="closeCardModal()" class="mt-2 text-gray-700">
+          Отмена
+        </button>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      // --- Счётчик и цена датчиков ---
+      const sensorCounts = document.querySelectorAll(".sensor-count");
+      const sensorPrices = document.querySelectorAll(".sensor-price");
+      const totalCostEl = document.getElementById("totalCost");
+
+      function updateTotal() {
+        let total = 0;
+        sensorCounts.forEach((input, idx) => {
+          const price = parseInt(sensorPrices[idx].dataset.price);
+          total += input.value * price;
+        });
+        totalCostEl.textContent = total;
+        localStorage.setItem(
+          "sensorSelection",
+          JSON.stringify(Array.from(sensorCounts).map((i) => i.value))
+        );
+      }
+
+      sensorCounts.forEach((input) => {
+        input.addEventListener("input", updateTotal);
+      });
+
+      // Восстановление данных из localStorage
+      const savedSelection = JSON.parse(
+        localStorage.getItem("sensorSelection") || "[]"
+      );
+      sensorCounts.forEach((input, idx) => {
+        if (savedSelection[idx]) input.value = savedSelection[idx];
+      });
+      updateTotal();
+
+      // --- Привязка карты ---
+      const cardForm = document.getElementById("cardForm");
+      const buyButtons = document.querySelectorAll(".buy-btn");
+      const cardModal = document.getElementById("cardModal");
+
+      function openCardModal() {
+        cardModal.classList.remove("hidden");
+      }
+      function closeCardModal() {
+        cardModal.classList.add("hidden");
+      }
+
+      cardForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        document.getElementById("cardSuccess").classList.remove("hidden");
+
+        buyButtons.forEach((btn) => {
+          btn.disabled = false;
+          btn.classList.remove("bg-gray-400", "cursor-not-allowed");
+          btn.classList.add(
+            "bg-green-700",
+            "hover:bg-green-800",
+            "cursor-pointer"
+          );
+        });
+
+        setTimeout(() => {
+          document.getElementById("cardSuccess").classList.add("hidden");
+          closeCardModal();
+        }, 2000);
+      });
+
+      // --- Кнопки покупки ---
+      buyButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.disabled) {
+            openCardModal();
+            return;
+          }
+          alert(`Тариф "${btn.dataset.plan}" успешно куплен!`);
+        });
+      });
+    </script>
+  </body>
+</html>
